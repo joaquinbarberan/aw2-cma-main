@@ -1,0 +1,30 @@
+###   
+
+# GET - IES
+GET https://ies21.edu.ar/
+
+
+### ----
+
+# GET - rest API
+GET https://api.escuelajs.co/api/v1/users
+
+
+### ---
+#GET localhost:3000
+
+GET http://localhost:3000
+
+
+### POST
+
+# POST local
+
+POST http://localhost:3000/procesoform
+
+
+### POST
+
+# POST local
+
+POST http://localhost:3000/guardardatos  
