@@ -1,7 +1,7 @@
 import productos from "./productos.mjs";
 
 export function obtenerproductos(req, res) {
-  res.json(productos);
+  res.json(productos.datos);
 }
 
 export function obtenerproductosPorId(req, res) {
@@ -9,7 +9,7 @@ export function obtenerproductosPorId(req, res) {
   //filtramos
   const id_producto = Number(req.params.id); //->verifica  si es numero ->cast
 
-  const productos_filtrados = productos.filter((producto) => {
+  const productos_filtrados = productos.datos.filter((producto) => {
     return id_producto === Number(producto.id);
   });
 
@@ -26,23 +26,57 @@ export function obtenerproductosPorId(req, res) {
 export function Altaproductos(req, res) {
   //logica extra
   const nuevo_producto = req.body;
-  productos.push(nuevo_producto);
+  const proximoID = Number(productos.ultimo_id) + 1
+  //agregar propiedad  ID
+  nuevoProducto.id = proximoID
+  //actualizar la referencia 
+  productos.ultimo_id = proximoID
+
+  productos.datos.push(nuevo_producto);
   const respuesta = {
     mensaje: "producto dado de alta",
   };
   res.status(201).json(respuesta);
 }
+
+export function modificarproducto(req, res) {
+  const id_producto = Number(req.params.id)
+  const productoAlta = req.body
+
+  productos.datos.forEach((producto) => {
+    //obteniendo el indice con indexOf
+    const indice = productos.datos.indexOf(producto)
+
+    if (id_producto === Number(producto.id)) {
+      productoAlta.id = id_producto
+      productos.datos[indice] = productoAlta
+    }
+    })
+    const respuesta = {
+      mensaje: 'producto cambiado'  +  id_producto
+    };
+    res.status(201).json(respuesta);
+
+}
+
+
+
+
+
+
+
+
 export function EliminarproductosPorId(req, res) {
   //logica extra
   const id_producto = Number(req.params.id); //->verifica  si es numero ->cast
 
   //filtramos
-  const productos_filtrados = productos.filter((producto) => {
+  const productos_filtrados = productos.datos.filter((producto) => {
     return id_producto !== Number(producto.id);
   });
 
-  productos.length = 0;
-  productos.push(...productos_filtrados);
+  productos.datos.length = 0;
+  productos.datos.push(...productos_filtrados);
 
   const respuesta = {
     mensaje: "producto eliminado",
